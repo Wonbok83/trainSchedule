@@ -12,31 +12,23 @@ var config = {
 
 firebase.initializeApp(config);
 
+
+//call firebase datatbase 
 var trainDatabase = firebase.database();
 
-
-
-
-
-
-
-
-
-
-
-
-
-//------------------------ 
+//------------------------  create click listener for submit button 
 $("#add").on("click", function (event) {
 
   event.preventDefault();
 
-
+  //input data 
   trainName = $("#trainName-input").val().trim();
   destination = $("#destination-input").val().trim();
   firstTime = $("#trainTime-input").val();
   frequency = parseInt($("#frequency-input").val().trim());
 
+
+  //save input data in object 
   var newTrain = {
     trainName: trainName,
     destination: destination,
@@ -45,24 +37,32 @@ $("#add").on("click", function (event) {
   };
 
 
-
+//push obejct data to firebase
   trainDatabase.ref().push(newTrain);
 
+
+
+  //check data is saved in variables
   console.log("train name: " + trainName);
   console.log("destination : " + destination);
   console.log("first time: " + firstTime);
   console.log("frequency: " + frequency);
 
-});
-//------------------------
+});//--------------- finish the listener 
 
+
+// when child is added in firebase 
 trainDatabase.ref().on("child_added", function (childSnapshot, prevChildKey) {
+
   var trainName = childSnapshot.val().trainName;
   var trainDest = childSnapshot.val().destination;
   var trainfirstTime = childSnapshot.val().firstTime;
   var trainFreq = childSnapshot.val().frequency;
+//for saving data in new variables for calling out to HTML 
 
+// -- time calculation 
 
+  //input time
   var firstTimeConvert = moment(trainfirstTime, "HH:mm").subtract(1, "years");
   console.log("firstTimeConvert: " + firstTimeConvert);
 
@@ -70,9 +70,17 @@ trainDatabase.ref().on("child_added", function (childSnapshot, prevChildKey) {
   var currentTime = moment();
   console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
 
+//testing which one is bigger 
+console.log("firtimeconvert: "+moment(firstTimeConvert).format("X")); 
+console.log("currentTime : "+moment(currentTime).format("X"));
+
+
+
   if (moment(firstTimeConvert).format("X") > moment(currentTime).format("X")) {
 
-    var nextTrain = moment(firstTimeConvert).add(trainFreq, "minutes");
+
+    //if train time is not passed, then it  
+    var nextTrain = moment(firstTimeConvert).format("hh:mm");
 
   } else {
 
@@ -94,8 +102,11 @@ trainDatabase.ref().on("child_added", function (childSnapshot, prevChildKey) {
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
     console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
 
+
   }
 
+
+  // put it on HTML 
   var table = $("<tr>");
   var trainNameDisplay = $("<td>").text(trainName);
   var destinationDisplay = $("<td>").text(trainDest);
@@ -108,6 +119,7 @@ trainDatabase.ref().on("child_added", function (childSnapshot, prevChildKey) {
   $("#train-info").append(table);
 
 
+  // error handling 
 }, function (errorObject) {
 
   console.log("Error Handled: " + errorObject.code);
