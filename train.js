@@ -37,7 +37,7 @@ $("#add").on("click", function (event) {
   };
 
 
-//push obejct data to firebase
+  //push obejct data to firebase
   trainDatabase.ref().push(newTrain);
 
 
@@ -54,34 +54,48 @@ $("#add").on("click", function (event) {
 // when child is added in firebase 
 trainDatabase.ref().on("child_added", function (childSnapshot, prevChildKey) {
 
+    //for saving data in new variables for calling out to HTML 
   var trainName = childSnapshot.val().trainName;
   var trainDest = childSnapshot.val().destination;
   var trainfirstTime = childSnapshot.val().firstTime;
   var trainFreq = childSnapshot.val().frequency;
-//for saving data in new variables for calling out to HTML 
+  var infoNum = prevChildKey;
 
-// -- time calculation 
+console.log("infoNum : " + infoNum);
+
+
+
+
+  // -- time calculation 
 
   //input time
-  var firstTimeConvert = moment(trainfirstTime, "HH:mm").subtract(1, "years");
-  console.log("firstTimeConvert: " + firstTimeConvert);
+  var firstTimeConvert = moment(trainfirstTime, "HH:mm").subtract(1, "years"); //go back to yesterday?
+  console.log("firstTimeConvert: " + moment(trainfirstTime, "HH:mm")); //UTC 
 
   // Current Time
   var currentTime = moment();
   console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
 
-//testing which one is bigger 
-console.log("firtimeconvert: "+moment(firstTimeConvert).format("X")); 
-console.log("currentTime : "+moment(currentTime).format("X"));
+
+
+  //testing which one is bigger     UTC
+  console.log("firtimeconvert: " + moment(firstTimeConvert).format("X"));
+  console.log("currentTime : " + moment(currentTime).format("X"));
 
 
 
-  if (moment(firstTimeConvert).format("X") > moment(currentTime).format("X")) {
+  if (moment(moment(trainfirstTime, "HH:mm")).format("X") > moment(currentTime).format("X")) {
 
+    var futureTime = moment(trainfirstTime, "HH:mm");
 
     //if train time is not passed, then it  
-    var nextTrain = moment(firstTimeConvert).format("hh:mm");
+    var nextTrain = moment(futureTime).format("HH:mm");
 
+    // Minute Until Train
+    var tMinutesTillTrain = moment(futureTime).diff(moment(), "minutes");
+    
+
+    console.log("ARRIVAL TIME: " + nextTrain);
   } else {
 
 
@@ -99,20 +113,30 @@ console.log("currentTime : "+moment(currentTime).format("X"));
     console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 
     // Next Train
-    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
+    var xx = moment().add(tMinutesTillTrain, "minutes");
 
+    var nextTrain = moment(xx).format("HH:mm") 
+
+    console.log("ARRIVAL TIME: " + nextTrain);
+
+    console.log("----------------------------------------");
 
   }
 
 
   // put it on HTML 
   var table = $("<tr>");
+  var button = $("<button>");
+
   var trainNameDisplay = $("<td>").text(trainName);
   var destinationDisplay = $("<td>").text(trainDest);
   var frequencyDisplay = $("<td>").text(trainFreq);
-  var nextArrivalDisplay = $("<td>").text(moment(nextTrain).format("HH:mm"));
+  var nextArrivalDisplay = $("<td>").text(nextTrain);
   var minutesAwayDisplay = $("<td>").text(tMinutesTillTrain);
+  // var removeDisplay = button.text("remove");
+
+  // button.attr("remove", infoNum);
+
 
   table.append(trainNameDisplay, destinationDisplay, frequencyDisplay, nextArrivalDisplay, minutesAwayDisplay);
 
@@ -127,6 +151,14 @@ console.log("currentTime : "+moment(currentTime).format("X"));
 
 
 });
+
+$("remove").on("click", function(infoNum){
+
+  remove()
+  
+
+});
+
 
 
 

@@ -54,6 +54,7 @@
                                     <th>Frequency</th>
                                     <th>Next Arrival</th>
                                     <th>Minutes Away</th>
+                                    <!-- <th>Remove</th> -->
                                 </tr>
                             </thread>
                             <tbody id = "train-info">
@@ -76,23 +77,23 @@
                     <form role="form">
                         <div class="form-group">
                             <label for="trainName-input">Train Name:</label>
-                            <input class="form-control" id="trainName-input" type="text">
+                            <input class="form-control" id="trainName-input" type="text" placeholder="ex) ATX 1234">
                         </div>
 
                         <div class="form-group">
                             <label for="destination-input">Destination:</label>
-                            <input class="form-control" id="destination-input" type="text">
+                            <input class="form-control" id="destination-input" type="text" placeholder="ex) Seattle">
                         </div>
 
                         <div class="form-group">
                             <label for="trainTime-input">First Train Time: HH:MM (military Time)</label>
-                            <input class="form-control" id="trainTime-input" type="text" placeholder = "13:30">
+                            <input class="form-control" id="trainTime-input" type="text" placeholder = "ex) 15:30">
                         </div>
 
 
                         <div class="form-group">
                             <label for="frequency-input">frequency: (min)</label>
-                            <input class="form-control" id="frequency-input" type="number">
+                            <input class="form-control" id="frequency-input" type="number" placeholder="ex) 10">
                         </div>
 
                         <button class="btn btn-default" id="add" type="submit">Submit</button>
