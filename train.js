@@ -22,10 +22,16 @@ $("#add").on("click", function (event) {
   event.preventDefault();
 
   //input data 
-  trainName = $("#trainName-input").val().trim();
-  destination = $("#destination-input").val().trim();
-  firstTime = $("#trainTime-input").val();
-  frequency = parseInt($("#frequency-input").val().trim());
+ var trainName = $("#trainName-input").val().trim();
+ var destination = $("#destination-input").val().trim();
+ var firstTime = $("#trainTime-input").val();
+ var frequency = parseInt($("#frequency-input").val().trim());
+
+if(trainName == ""||destination==""||firstTime==""||frequency==0){ alert("Type train information correctly")
+
+}
+
+
 
 
   //save input data in object 
